@@ -28,7 +28,8 @@ docs/
 ├── 05-HANDOFF.md               # Context on Henry, decisions-and-why, things NOT to do
 └── guides/
     ├── STYLE-GUIDE.md          # Code conventions + tooling contract (reference before writing code)
-    └── PLAN-FORMAT.md          # How to write implementation plans (docs/plans/)
+    ├── PLAN-FORMAT.md          # How to write implementation plans (docs/plans/)
+    └── REMOTE-TRAINING.md      # Using the home GPU box (specs, SSH, first-time setup, running work)
 ```
 
 Build order per the overview: **GBDT baseline (A) → TCN unified (B) → Hybrid (C, only if
@@ -92,6 +93,18 @@ console entry point, wire it through `[project.scripts]` in `pyproject.toml`.
 
 All three gates (ruff, mypy, pytest) run in `.github/workflows/ci.yml` on every push/PR. Keep
 them green as you build; a red main branch is a bug.
+
+## The GPU box — use it
+
+There **is** a GPU: a home Ubuntu box (RTX 3060 Ti, CUDA) reachable over SSH from this Mac via
+the aliases `gpu-linux` / `gpu-anywhere`. See `docs/guides/REMOTE-TRAINING.md` for specs, access,
+first-time DRAKE setup, and the run/monitor/pull workflow.
+
+You're encouraged to use it whenever local (CPU-only Mac) isn't enough — checking the box specs,
+verifying the CUDA torch path works, running a short **test** training of the TCN/GRU on synthetic
+data to prove the training loop trains on GPU, or benchmarking. DRAKE's nets are small (<1M params),
+so VRAM is never the limit — the box is about speed and validating the real GPU path. Run real work
+inside `tmux`; it's a shared personal machine, so check with Henry before occupying the GPU for hours.
 
 ## About the dependencies
 

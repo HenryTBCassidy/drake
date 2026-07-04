@@ -41,6 +41,9 @@ results/
 *.key
 credentials/
 
+# Machine-specific setup notes (host mappings, infra details) — never committed
+local/
+
 # Tooling caches
 .ruff_cache/
 .mypy_cache/

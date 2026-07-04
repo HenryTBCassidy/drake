@@ -1,0 +1,151 @@
+# DRAKE — Plan Document Format
+
+How we write implementation plans in `docs/plans/`. Companion to the [Style Guide](STYLE-GUIDE.md),
+which covers code conventions.
+
+> Adapted from the AlphaBlokus plan format — DRAKE plans the same way.
+
+---
+
+## Purpose
+
+Plan docs are the bridge between "what we want to do" and "actually doing it." They serve as:
+
+1. **A checklist** — track progress, know what's done and what's next.
+2. **A reference** — understand why a change is needed and what it touches.
+3. **A commit guide** — each checklist row should map to roughly one commit.
+
+## Structure
+
+Every plan doc follows this layout:
+
+```
+# Title
+
+One-paragraph intro: what this plan covers, any prerequisites,
+links to companion docs.
+
+---
+
+## Checklist
+
+Table with columns: #, Item, Effort, Priority, Done.
+Items numbered sequentially (P1, P2, ... or M1, M2, ... or Step 1, 2, ...).
+Ordered by execution sequence, not by topic.
+
+---
+
+## P1. First Item Title
+
+Detailed description: current state, what's wrong, what the fix is,
+code examples, effort estimate.
+
+---
+
+## P2. Second Item Title
+
+...and so on, one section per checklist row.
+```
+
+### Key rules
+
+1. **Checklist at the top.** It's the abstract — you should be able to read just the table and
+   know the full scope. Scroll down for details.
+
+2. **Section numbers match checklist IDs.** If the checklist says P8, the section heading says
+   `## P8.` No exceptions. This avoids the confusion of P8 linking to section 3 because topics
+   were grouped differently.
+
+3. **One section per checklist item.** Don't group multiple checklist items under one section
+   heading. If two items are related, they can reference each other, but each gets its own section.
+
+4. **Execution order, not topic order.** The checklist is ordered to minimise merge pain and
+   dependency issues. Sections follow that same order. If you need to reorganise the sequence,
+   renumber everything — don't leave gaps or out-of-order IDs.
+
+5. **Each row ~ one commit.** The checklist should be granular enough that each item is a single,
+   reviewable commit. If an item takes more than ~2 hours, consider splitting it.
+
+6. **Effort and priority on every row.** Even rough estimates help with planning. Use:
+   High/Medium/Low for priority, time estimates for effort.
+
+7. **Done column.** Mark with ✅ as items are completed. This is the primary progress tracker.
+
+## Checklist Table Format
+
+```markdown
+| # | Item | Effort | Priority | Done |
+|---|------|--------|----------|------|
+| P1 | Short description of the task | 30 min | High | ✅ |
+| P2 | Another task | 1 hour | Medium | |
+```
+
+Optional extra columns (if useful for that plan):
+- **Files** — which files are touched
+- **Depends on** — prerequisite steps
+
+## Section Format
+
+Each section should include whatever subset of these is relevant:
+
+- **Current state** — what exists now, what's wrong with it
+- **Fix / Recommendation** — what to do about it
+- **Code examples** — concrete before/after or pseudocode
+- **Action items** — sub-tasks within the section (if the item is complex)
+- **Estimated effort** — repeat from the checklist for quick reference
+
+Don't pad sections with filler. If a fix is "change `> 0` to `>= 0` in 4 places," that's the
+whole section. Short is fine.
+
+## Naming Conventions
+
+- **Prefix IDs by plan:** e.g. `P1–P12` for the data-pipeline plan, `M1–M8` for models, plain
+  `Step 1–18` for a self-contained plan. Pick a prefix and stick with it.
+- **File names:** lowercase, hyphenated: `riot-collection-pipeline.md`, `gbdt-baseline.md`,
+  `tcn-unified-model.md`.
+- **Location:** active plans in `docs/plans/`, completed plans in `docs/plans/archive/`.
+
+## Lifecycle
+
+1. **Draft:** Write the plan in `docs/plans/`, get agreement on scope.
+2. **Execute:** Work through the checklist *one row at a time*, marking items ✅ in the Done
+   column **the moment that row's work lands in the working tree** (not at the end of a batch).
+   If an item is intentionally skipped or deferred, mark it `Deferred` in the Done column and
+   add a quoted note below the checklist explaining why.
+3. **Archive — do this the moment the plan is complete, not later.** When every checklist item
+   is either ✅ or `Deferred`, move the file to `docs/plans/archive/` using `git mv` (preserves
+   history). Fix any relative links between plans so cross-references still work after the move.
+   Don't delete completed plans — they explain why the code looks the way it does.
+
+> **Invariant:** `docs/plans/` at the top level contains *only* plans that are in flight or not
+> yet started. The archive contains everything else. If you finish a plan and don't archive it in
+> the same commit (or the immediate follow-up), you're leaving the directory in a misleading
+> state — a future reader can't tell what is still live work.
+
+If a plan was superseded mid-flight (its scope was absorbed into another plan, or the approach was
+abandoned), add a one-paragraph "Archived: superseded" banner at the top explaining what replaced
+it, then `git mv` to archive. Don't leave it in the active directory just because not every row is ✅.
+
+### What "complete" means
+
+A plan is complete when every checklist item is either ✅ or marked `Deferred` with a reason.
+Nice-to-have items that were always out of scope for the current branch are fine to defer — just
+say so.
+
+## Anti-patterns
+
+- **Checklist at the bottom.** Nobody scrolls past 10 sections to find the progress tracker.
+- **Section numbers that don't match checklist IDs.** Causes confusion every time someone
+  cross-references.
+- **Grouping multiple checklist items under one section.** Makes it unclear which section
+  describes which item.
+- **Topic-ordered sections with execution-ordered checklist.** Pick one ordering and use it for both.
+- **No effort estimates.** "This will take a while" is not a plan.
+- **Giant monolithic items.** If a checklist row says "Implement the entire pipeline" it's not
+  useful. Break it down.
+- **Leaving completed plans in `docs/plans/`.** As soon as the last checklist item lands (✅ or
+  `Deferred`), `git mv` the file to `docs/plans/archive/` in the same commit. The active directory
+  is a working surface, not a graveyard.
+- **Forgetting to tick the Done column as you go.** Tick each row ✅ the moment its work is in the
+  working tree. Batch-ticking at the end (or worse, never) makes the plan useless as a progress
+  tracker — anyone glancing at the file should see at a glance where you are.

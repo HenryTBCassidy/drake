@@ -27,7 +27,8 @@ docs/
 ├── 04-COMPETITIVE-LANDSCAPE.md # Prior art and the accuracy bars to beat
 ├── 05-HANDOFF.md               # Context on Henry, decisions-and-why, things NOT to do
 └── guides/
-    └── STYLE-GUIDE.md          # Code conventions + tooling contract (reference before writing code)
+    ├── STYLE-GUIDE.md          # Code conventions + tooling contract (reference before writing code)
+    └── PLAN-FORMAT.md          # How to write implementation plans (docs/plans/)
 ```
 
 Build order per the overview: **GBDT baseline (A) → TCN unified (B) → Hybrid (C, only if
@@ -71,6 +72,10 @@ Follow `docs/guides/STYLE-GUIDE.md` for all code. Highlights:
 - `from __future__ import annotations`; modern builtin generics (`list[str]`, `int | None`).
 - `pathlib.Path` for filesystem, `time.perf_counter()` for timing.
 - Parquet for stored data (see docs/01 for the schema); DuckDB is a convenience layer only.
+
+**Before a large build, write a plan.** Follow `docs/guides/PLAN-FORMAT.md` and put it in
+`docs/plans/` (checklist at top, one section per row, tick ✅ as work lands, `git mv` to
+`docs/plans/archive/` when complete). This is how Henry tracks and reviews substantial work.
 
 ## Commands
 

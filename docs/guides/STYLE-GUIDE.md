@@ -250,7 +250,12 @@ path = f"matches_{tier}_{patch}.parquet"                         # everything el
 
 ## Logging
 
-- **loguru** for all application logging. **No `print()`.**
+- **loguru** for all *application* logging — progress, warnings, errors, diagnostic state.
+  Never `print()` for logging.
+- **`print()` is fine for deliberate human-facing console output**: CLI-rendered summaries and
+  tables, interactive displays (e.g. a reliability-diagram dump, a value-add ranking), and
+  standalone `__main__` dev utilities. The distinction is intent: a *diagnostic stream* uses
+  loguru; the *stdout a user explicitly asked to see* can use `print()`.
 - Structured data (metrics, feature stats) goes to Parquet/results, not log files.
 - Levels: `DEBUG` (detailed state) · `INFO` (progress: collection/training milestones) ·
   `WARNING` (recoverable: rate-limit backoff, dropped malformed match) · `ERROR` (operation-stopping).
@@ -316,7 +321,7 @@ All three gates run in CI (`.github/workflows/ci.yml`) on every push/PR; keep th
 
 ## Anti-Patterns — What We Don't Do
 
-- ❌ `print()` for output — use logging
+- ❌ `print()` for logging/diagnostics — use loguru (`print()` is fine for deliberate console display)
 - ❌ Magic numbers — extract to named constants
 - ❌ Code duplication — extract shared code
 - ❌ Mutable global state — pass state explicitly

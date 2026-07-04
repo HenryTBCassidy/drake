@@ -32,7 +32,7 @@ validated on the GPU box. Implements `docs/00`–`03`; conventions per
 |---|------|--------|----------|------|
 | P1 | This plan | 30 min | High | ✅ |
 | P2 | Core architecture: `domain.py`, `config.py`, `protocols.py`, `.env.example` | 1.5 h | High | ✅ |
-| P3 | Rate limiter + Riot API client, tested via httpx MockTransport | 2 h | High | |
+| P3 | Rate limiter + Riot API client, tested via httpx MockTransport | 2 h | High | ✅ |
 | P4 | Synthetic match generator (`SyntheticRiotApi` + latent-strength simulator) | 2 h | High | |
 | P5 | Stable-anchor seeding + resumable collector (SQLite checkpoints, raw Parquet) | 2 h | High | |
 | P6 | Feature engineering: raw → processed Parquet (draft, in-game, momentum, 30s resample) | 2 h | High | |
@@ -50,7 +50,7 @@ validated on the GPU box. Implements `docs/00`–`03`; conventions per
 ## P2. Core architecture
 
 `drake/domain.py`: `Tier`, `Region`, `Role`, `Side` StrEnums with stable integer encodings
-(`Tier.index`, etc. — the int8 codes in the Parquet schema), champion-count constants
+(`Tier.code`, etc. — the int8 codes in the Parquet schema), champion-count constants
 (`NUM_CHAMPIONS = 165`, `UNKNOWN_CHAMPION_INDEX = 165`), queue id, and shared type aliases.
 
 `drake/config.py`: frozen dataclasses — `PathsConfig` (data/models/results roots with

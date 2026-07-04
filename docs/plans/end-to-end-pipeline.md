@@ -34,7 +34,7 @@ validated on the GPU box. Implements `docs/00`–`03`; conventions per
 | P2 | Core architecture: `domain.py`, `config.py`, `protocols.py`, `.env.example` | 1.5 h | High | ✅ |
 | P3 | Rate limiter + Riot API client, tested via httpx MockTransport | 2 h | High | ✅ |
 | P4 | Synthetic match generator (`SyntheticRiotApi` + latent-strength simulator) | 2 h | High | ✅ |
-| P5 | Stable-anchor seeding + resumable collector (SQLite checkpoints, raw Parquet) | 2 h | High | |
+| P5 | Stable-anchor seeding + resumable collector (SQLite checkpoints, raw Parquet) | 2 h | High | ✅ |
 | P6 | Feature engineering: raw → processed Parquet (draft, in-game, momentum, 30s resample) | 2 h | High | |
 | P7 | Match-level time-based train/val/test splits | 45 min | High | |
 | P8 | GBDT baseline (Model A): draft + in-game LightGBM behind the model protocol | 1.5 h | High | |
@@ -88,8 +88,9 @@ exact fields the pipeline consumes, in Riot's shapes.
 `drake/data/collector.py`: crawl anchors → recent match ids → match + timeline, labelled
 with the anchor's tier/LP; SQLite checkpoint DB tracks seeded tiers and per-match download
 state so restarts skip completed work; dedup by match id; quality filters (queue 420,
-duration > 300 s); raw Parquet written per docs/01 layout (JSON payload column + key
-metadata columns). Works identically against `RiotApiClient` or `SyntheticRiotApi`.
+duration > 300 s); raw rows (JSON payload columns + key metadata) written as chunked part files under
+`raw/matches/{region}/{tier}/` — a simplification of the docs/01 per-patch filenames;
+patch stays available as a column. Works identically against `RiotApiClient` or `SyntheticRiotApi`.
 
 ## P6. Feature engineering
 

@@ -31,7 +31,7 @@ validated on the GPU box. Implements `docs/00`–`03`; conventions per
 | # | Item | Effort | Priority | Done |
 |---|------|--------|----------|------|
 | P1 | This plan | 30 min | High | ✅ |
-| P2 | Core architecture: `domain.py`, `config.py`, `protocols.py`, `.env.example` | 1.5 h | High | |
+| P2 | Core architecture: `domain.py`, `config.py`, `protocols.py`, `.env.example` | 1.5 h | High | ✅ |
 | P3 | Rate limiter + Riot API client, tested via httpx MockTransport | 2 h | High | |
 | P4 | Synthetic match generator (`SyntheticRiotApi` + latent-strength simulator) | 2 h | High | |
 | P5 | Stable-anchor seeding + resumable collector (SQLite checkpoints, raw Parquet) | 2 h | High | |

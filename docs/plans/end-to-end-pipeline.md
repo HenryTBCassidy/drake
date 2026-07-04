@@ -40,7 +40,7 @@ validated on the GPU box. Implements `docs/00`–`03`; conventions per
 | P8 | GBDT baseline (Model A): draft + in-game LightGBM behind the model protocol | 1.5 h | High | ✅ |
 | P9 | Evaluation harness: metrics, per-timestamp matrix, reliability plot, report | 2 h | High | ✅ |
 | P10 | Registry + CLI (`drake collect/features/split/train/evaluate`) + run configs | 1.5 h | High | ✅ |
-| P11 | End-to-end slow test + README quickstart rewrite | 1 h | High | |
+| P11 | End-to-end slow test + README quickstart rewrite | 1 h | High | ✅ |
 | P12 | TCN unified model (Model B) + training loop, tiny-config train on synthetic | 3 h | Medium | |
 | P13 | Validate TCN training on the GPU box (CUDA), per REMOTE-TRAINING.md | 1 h | Medium | |
 | P14 | Per-tier evaluation breakdown + Platt calibration | 1.5 h | Low | ✅ |

@@ -39,7 +39,7 @@ validated on the GPU box. Implements `docs/00`–`03`; conventions per
 | P7 | Match-level time-based train/val/test splits | 45 min | High | ✅ |
 | P8 | GBDT baseline (Model A): draft + in-game LightGBM behind the model protocol | 1.5 h | High | ✅ |
 | P9 | Evaluation harness: metrics, per-timestamp matrix, reliability plot, report | 2 h | High | ✅ |
-| P10 | Registry + CLI (`drake synth/collect/features/train/evaluate`) + run configs | 1.5 h | High | |
+| P10 | Registry + CLI (`drake collect/features/split/train/evaluate`) + run configs | 1.5 h | High | ✅ |
 | P11 | End-to-end slow test + README quickstart rewrite | 1 h | High | |
 | P12 | TCN unified model (Model B) + training loop, tiny-config train on synthetic | 3 h | Medium | |
 | P13 | Validate TCN training on the GPU box (CUDA), per REMOTE-TRAINING.md | 1 h | Medium | |
@@ -132,8 +132,8 @@ diagram and metric-vs-timestamp line plots (matplotlib, saved to results dir).
 
 `drake/registry.py`: builds the configured `IRiotApi` (synthetic vs riot) and
 `IWinProbabilityModel` (gbdt / tcn) — the only module naming concretions.
-`drake/cli.py`: argparse CLI wired through `[project.scripts]` — `drake synth`, `drake
-collect`, `drake features`, `drake split`, `drake train`, `drake evaluate`, each taking
+`drake/cli.py`: argparse CLI wired through `[project.scripts]` — `drake collect` (synthetic
+or riot, per config.source), `drake features`, `drake split`, `drake train`, `drake evaluate`, each taking
 `--config run_configurations/<file>.json`. Ships a default `synthetic_smoke.json`.
 
 ## P11. End-to-end slow test + README

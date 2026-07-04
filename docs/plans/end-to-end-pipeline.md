@@ -36,7 +36,7 @@ validated on the GPU box. Implements `docs/00`–`03`; conventions per
 | P4 | Synthetic match generator (`SyntheticRiotApi` + latent-strength simulator) | 2 h | High | ✅ |
 | P5 | Stable-anchor seeding + resumable collector (SQLite checkpoints, raw Parquet) | 2 h | High | ✅ |
 | P6 | Feature engineering: raw → processed Parquet (draft, in-game, momentum, 30s resample) | 2 h | High | ✅ |
-| P7 | Match-level time-based train/val/test splits | 45 min | High | |
+| P7 | Match-level time-based train/val/test splits | 45 min | High | ✅ |
 | P8 | GBDT baseline (Model A): draft + in-game LightGBM behind the model protocol | 1.5 h | High | |
 | P9 | Evaluation harness: metrics, per-timestamp matrix, reliability plot, report | 2 h | High | |
 | P10 | Registry + CLI (`drake synth/collect/features/train/evaluate`) + run configs | 1.5 h | High | |

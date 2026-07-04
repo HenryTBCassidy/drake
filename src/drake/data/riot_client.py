@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import time
-from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import httpx
@@ -13,6 +12,8 @@ from drake.domain import RANKED_SOLO_QUEUE_ID, Division, JsonDict, MatchId, Puui
 from drake.protocols import IRiotApi
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from drake.data.rate_limiter import SlidingWindowRateLimiter
 
 RANKED_SOLO_QUEUE_NAME = "RANKED_SOLO_5x5"

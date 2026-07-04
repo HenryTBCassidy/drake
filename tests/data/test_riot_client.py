@@ -83,9 +83,7 @@ def test_429_retries_after_the_advertised_delay_then_succeeds() -> None:
         return httpx.Response(200, json={"ok": True})
 
     limiter = SlidingWindowRateLimiter([(1000, 1.0)], clock=lambda: 0.0, sleep=lambda _: None)
-    client = RiotApiClient(
-        api_key="k", limiter=limiter, transport=httpx.MockTransport(handler), sleep=sleeps.append
-    )
+    client = RiotApiClient(api_key="k", limiter=limiter, transport=httpx.MockTransport(handler), sleep=sleeps.append)
     assert client.get_match(Region.NA1, "NA1_1") == {"ok": True}
     assert sleeps == [3.0]
 

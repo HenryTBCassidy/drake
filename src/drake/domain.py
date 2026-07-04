@@ -126,6 +126,10 @@ class Side(IntEnum):
     def short_name(self) -> str:
         return "blue" if self is Side.BLUE else "red"
 
+    @property
+    def opposite(self) -> Side:
+        return Side.RED if self is Side.BLUE else Side.BLUE
+
 
 def compute_lp_proxy(tier: Tier, division: Division | None, league_points: int) -> float:
     """Normalise a player's position within their tier to [0, 1].

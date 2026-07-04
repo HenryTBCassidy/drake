@@ -31,7 +31,7 @@ def test_from_json_loads_nested_sections_and_defaults_the_rest(tmp_path: Path) -
                 "name": "smoke",
                 "source": "synthetic",
                 "paths": {"data_dir": str(tmp_path / "data")},
-                "synthetic": {"num_matches": 50, "seed": 3},
+                "synthetic": {"matches_per_tier": 50, "seed": 3},
                 "gbdt": {"n_estimators": 20},
                 "evaluation": {"timestamps_minutes": [0, 5, 10]},
             }
@@ -40,7 +40,7 @@ def test_from_json_loads_nested_sections_and_defaults_the_rest(tmp_path: Path) -
     config = RunConfig.from_json(run_file)
     assert config.name == "smoke"
     assert config.paths.data_dir == tmp_path / "data"
-    assert config.synthetic.num_matches == 50
+    assert config.synthetic.matches_per_tier == 50
     assert config.gbdt.n_estimators == 20
     assert config.gbdt.num_leaves == 127, "unspecified fields keep their defaults"
     assert config.evaluation.timestamps_minutes == (0, 5, 10), "JSON lists become tuples"

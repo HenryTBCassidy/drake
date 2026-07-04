@@ -69,7 +69,7 @@ class CollectionConfig:
 class SyntheticConfig:
     """Synthetic data generation (reference mode — no Riot key required)."""
 
-    num_matches: int = 1000
+    matches_per_tier: int = 1000  # unique-match pool size per (region, tier)
     seed: int = 7
     anchor_fraction: float = 0.6
 

@@ -1,0 +1,81 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "drake"
+version = "0.1.0"
+description = "DRAKE — unified League of Legends win probability prediction, draft through endgame"
+requires-python = ">=3.11"
+# Starting dependency set from the documented tech stack (see docs/00-PROJECT-OVERVIEW.md
+# and docs/01-DATA-PIPELINE.md). Add/remove with `uv add` / `uv remove` as the
+# implementation firms up — this is a starting point, not a contract.
+dependencies = [
+    "numpy>=1.26.0",
+    "pandas>=2.0.0",
+    "pyarrow>=14.0.0",
+    "torch>=2.0.0",
+    "lightgbm>=4.0.0",
+    "scikit-learn>=1.4.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0",
+    "duckdb>=1.0.0",
+    "loguru>=0.7.0",
+    "tqdm>=4.60.0",
+    "plotly>=5.0.0",
+    "matplotlib>=3.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.4.0",
+    "mypy>=1.14",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/drake"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "F",     # pyflakes
+    "I",     # isort
+    "UP",    # pyupgrade
+    "B",     # flake8-bugbear
+    "SIM",   # flake8-simplify
+    "TCH",   # flake8-type-checking
+]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src/drake"]
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = [
+    "lightgbm.*",
+    "sklearn.*",
+    "duckdb.*",
+    "pandas.*",
+    "pyarrow.*",
+    "tqdm.*",
+    "plotly.*",
+    "matplotlib.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]

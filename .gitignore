@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments (uv manages .venv; the lockfile IS committed)
+.venv/
+venv/
+ENV/
+
+# Data files — collected match data is large and regenerable, never committed
+data/
+*.parquet
+temp/
+
+# Model artifacts
+models/
+*.pt
+*.pth
+*.pkl
+*.joblib
+*.lgb
+
+# Results — plots and generated reports are build artifacts
+results/
+*.png
+*.svg
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.html
+
+# API keys and secrets
+.env
+*.key
+credentials/
+
+# Tooling caches
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs / experiment tracking
+logs/
+*.log
+wandb/

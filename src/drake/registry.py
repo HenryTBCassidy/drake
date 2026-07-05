@@ -56,6 +56,6 @@ def build_model(config: RunConfig) -> IWinProbabilityModel:
 
 def _build_tcn(config: RunConfig) -> IWinProbabilityModel:
     # Imported lazily so the GBDT path never pays the torch import cost.
-    from drake.models.tcn import TcnModel  # type: ignore[import-not-found]  # TODO: P12 adds the TCN
+    from drake.models.tcn import TcnModel
 
     return TcnModel(config.tcn)

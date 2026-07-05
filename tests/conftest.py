@@ -7,6 +7,14 @@ which runs seed -> collect -> features -> splits once on synthetic data.
 
 from __future__ import annotations
 
+import os
+
+# The test process co-loads LightGBM (brew libomp) and torch (bundled libomp);
+# on macOS the two OpenMP runtimes deadlock inside parallel regions. Single-
+# threaded OpenMP avoids that. Production never co-loads them (the registry
+# imports torch lazily), so this is a test-harness concern only.
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 

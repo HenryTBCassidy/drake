@@ -1,0 +1,14 @@
+{
+  "name": "synthetic-tcn-smoke",
+  "source": "synthetic",
+  "model": "tcn",
+  "synthetic": {"matches_per_tier": 300, "seed": 7},
+  "collection": {
+    "regions": ["na1"],
+    "tiers": ["GOLD", "PLATINUM"],
+    "matches_per_player": 20,
+    "max_anchors_per_tier": 40
+  },
+  "tcn": {"max_epochs": 10, "early_stopping_patience": 3, "device": "auto"},
+  "evaluation": {"timestamps_minutes": [0, 5, 10, 15, 20, 25, 30], "per_tier": true, "calibrate": true}
+}

@@ -16,6 +16,7 @@ from drake.data.features import (
     FeatureBuilder,
     load_processed_features,
 )
+from drake.domain import NUM_CHAMPIONS
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -84,7 +85,7 @@ def test_write_produces_per_tier_files_and_metadata(pipeline: PipelineRun) -> No
     metadata = json.loads(pipeline.paths.feature_metadata_path.read_text())
     assert metadata["num_matches"] == pipeline.processed["match_id"].nunique()
     assert metadata["game_state_columns"] == GAME_STATE_COLUMNS
-    assert all(0 <= champion_id < 165 for champion_id in metadata["champion_ids"])
+    assert all(0 <= champion_id < NUM_CHAMPIONS for champion_id in metadata["champion_ids"])
 
 
 def test_malformed_matches_are_dropped_not_fatal(pipeline: PipelineRun) -> None:

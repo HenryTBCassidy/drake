@@ -61,6 +61,7 @@ class CollectionConfig:
     min_ranked_games: int = 150
     min_win_rate: float = 0.47
     max_win_rate: float = 0.53
+    require_veteran: bool = True  # Riot's veteran flag is rare — set false to widen the anchor pool
     requests_per_second: int = 20
     requests_per_two_minutes: int = 100
 

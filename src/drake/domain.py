@@ -15,8 +15,13 @@ Puuid: TypeAlias = str
 JsonDict: TypeAlias = dict[str, Any]
 
 RANKED_SOLO_QUEUE_ID = 420
-NUM_CHAMPIONS = 165
-UNKNOWN_CHAMPION_INDEX = 165  # 166th embedding entry, used for partial drafts
+# Champion embedding/vocabulary capacity. Riot champion IDs are SPARSE (1..~950) and
+# the live roster is ~170 and grows a few per year — models remap raw IDs to contiguous
+# indices at fit time, so this only needs to exceed the distinct-champion count with
+# headroom, not match any particular ID. (Real EUW data has 173 distinct; the old value
+# of 165 both under-counted the roster and wrongly assumed contiguous 0-164 IDs.)
+NUM_CHAMPIONS = 200
+UNKNOWN_CHAMPION_INDEX = 200  # reserved top index for unknown/masked picks (partial drafts)
 MIN_GAME_DURATION_SECONDS = 300  # games shorter than this are remakes
 TIMESTEP_SECONDS = 30
 MAX_GAME_TIME_SECONDS = 45 * 60  # normalisation cap for the game_time feature

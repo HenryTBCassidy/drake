@@ -18,7 +18,7 @@ import torch
 from loguru import logger
 from torch import nn
 
-from drake.data.features import DRAFT_COLUMNS, GAME_STATE_COLUMNS, LABEL_COLUMN
+from drake.data.features import DRAFT_COLUMNS, GAME_STATE_COLUMNS, LABEL_COLUMN, build_champion_index
 from drake.domain import UNKNOWN_CHAMPION_INDEX
 from drake.protocols import IWinProbabilityModel
 from drake.training.trainer import MatchBatch, TcnTrainer, select_device
@@ -151,7 +151,7 @@ class TcnModel(IWinProbabilityModel):
 
     def fit(self, train: pd.DataFrame, val: pd.DataFrame) -> None:
         """Train on processed rows with UNKNOWN-token draft masking and early stopping."""
-        self._champion_index = _build_champion_index(train)
+        self._champion_index = build_champion_index(train)
         # Standardise game-state features on train stats — raw gold diffs are in the
         # thousands and would saturate the win head's sigmoid.
         game_state = train[GAME_STATE_COLUMNS].to_numpy(dtype=np.float64)
@@ -249,14 +249,6 @@ class MatchTensors:
 
     def batch_of_one(self, device: torch.device) -> MatchBatch:
         return MatchBatch.collate([self], device)
-
-
-def _build_champion_index(train: pd.DataFrame) -> dict[int, int]:
-    """Raw champion id -> contiguous embedding index; unseen ids map to UNKNOWN."""
-    raw_ids = sorted(int(champion) for champion in pd.unique(train[DRAFT_COLUMNS].to_numpy().ravel()))
-    if len(raw_ids) > UNKNOWN_CHAMPION_INDEX:
-        raise ValueError(f"{len(raw_ids)} distinct champions exceeds the embedding capacity")
-    return {raw: index for index, raw in enumerate(raw_ids)}
 
 
 def _to_match_tensors(

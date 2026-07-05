@@ -24,6 +24,7 @@ from loguru import logger
 from drake.domain import (
     MAX_GAME_TIME_SECONDS,
     SEASON_LENGTH_DAYS,
+    UNKNOWN_CHAMPION_INDEX,
     JsonDict,
     Region,
     Role,
@@ -40,6 +41,24 @@ LABEL_COLUMN = "label"
 IDENTITY_COLUMNS = ["match_id", "timestep", "game_time_sec"]
 CONTEXT_COLUMNS = ["tier", "lp_proxy", "region", "patch_major", "patch_minor", "season_progress"]
 DRAFT_COLUMNS = [f"{side.short_name}_{role.short_name}" for side in Side for role in Role]
+
+
+def build_champion_index(rows: pd.DataFrame) -> dict[int, int]:
+    """Map the raw champion ids present in ``rows`` to contiguous indices [0, N).
+
+    Riot champion ids are sparse (1..~950); both the TCN's embeddings and the
+    GBDT's LightGBM categoricals need a dense, fit/predict-stable index. Callers
+    map ids unseen at fit time to ``UNKNOWN_CHAMPION_INDEX``.
+
+    Raises:
+        ValueError: if more distinct champions appear than the vocabulary can hold.
+    """
+    raw_ids = sorted(int(champion) for champion in pd.unique(rows[DRAFT_COLUMNS].to_numpy().ravel()))
+    if len(raw_ids) > UNKNOWN_CHAMPION_INDEX:
+        raise ValueError(f"{len(raw_ids)} distinct champions exceeds embedding capacity {UNKNOWN_CHAMPION_INDEX}")
+    return {raw: index for index, raw in enumerate(raw_ids)}
+
+
 _LANE_GOLD_COLUMNS = ["gold_diff_top", "gold_diff_jg", "gold_diff_mid", "gold_diff_bot"]
 _LANE_XP_COLUMNS = [f"xp_diff_{role.short_name}" for role in Role]
 _LANE_CS_COLUMNS = [f"cs_diff_{role.short_name}" for role in Role]

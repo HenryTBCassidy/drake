@@ -9,9 +9,9 @@ import pytest
 import torch
 
 from drake.config import TcnConfig
-from drake.data.features import GAME_STATE_COLUMNS
+from drake.data.features import GAME_STATE_COLUMNS, build_champion_index
 from drake.domain import UNKNOWN_CHAMPION_INDEX
-from drake.models.tcn import TcnModel, TcnNet, _build_champion_index, _to_match_tensors
+from drake.models.tcn import TcnModel, TcnNet, _to_match_tensors
 from drake.training.trainer import MatchBatch
 
 if TYPE_CHECKING:
@@ -55,7 +55,7 @@ def test_forward_is_causal(pipeline: PipelineRun) -> None:
     stats = val[GAME_STATE_COLUMNS].to_numpy(dtype=np.float64)
     matches = _to_match_tensors(
         val,
-        _build_champion_index(pipeline.by_split["train"]),
+        build_champion_index(pipeline.by_split["train"]),
         stats.mean(axis=0),
         np.maximum(stats.std(axis=0), 1e-6),
     )

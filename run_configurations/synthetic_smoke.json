@@ -1,0 +1,14 @@
+{
+  "name": "synthetic-smoke",
+  "source": "synthetic",
+  "model": "gbdt",
+  "synthetic": {"matches_per_tier": 300, "seed": 7},
+  "collection": {
+    "regions": ["na1"],
+    "tiers": ["GOLD", "PLATINUM"],
+    "matches_per_player": 20,
+    "max_anchors_per_tier": 40
+  },
+  "gbdt": {"n_estimators": 300, "early_stopping_rounds": 30, "min_child_samples": 10},
+  "evaluation": {"timestamps_minutes": [0, 5, 10, 15, 20, 25, 30], "per_tier": true, "calibrate": true}
+}

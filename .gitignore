@@ -14,12 +14,12 @@ venv/
 ENV/
 
 # Data files — collected match data is large and regenerable, never committed
-data/
+/data/
 *.parquet
 temp/
 
 # Model artifacts
-models/
+/models/
 *.pt
 *.pth
 *.pkl
@@ -27,7 +27,7 @@ models/
 *.lgb
 
 # Results — plots and generated reports are build artifacts
-results/
+/results/
 *.png
 *.svg
 *.jpg

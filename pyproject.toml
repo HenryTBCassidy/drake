@@ -26,6 +26,9 @@ dependencies = [
     "matplotlib>=3.8.0",
 ]
 
+[project.scripts]
+drake = "drake.cli:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0.0",

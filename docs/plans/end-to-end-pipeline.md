@@ -42,7 +42,7 @@ validated on the GPU box. Implements `docs/00`–`03`; conventions per
 | P10 | Registry + CLI (`drake collect/features/split/train/evaluate`) + run configs | 1.5 h | High | ✅ |
 | P11 | End-to-end slow test + README quickstart rewrite | 1 h | High | ✅ |
 | P12 | TCN unified model (Model B) + training loop, tiny-config train on synthetic | 3 h | Medium | ✅ |
-| P13 | Validate TCN training on the GPU box (CUDA), per REMOTE-TRAINING.md | 1 h | Medium | |
+| P13 | Validate TCN training on the GPU box (CUDA), per REMOTE-TRAINING.md | 1 h | Medium | ✅ |
 | P14 | Per-tier evaluation breakdown + Platt calibration | 1.5 h | Low | ✅ |
 
 ---
@@ -157,7 +157,14 @@ exactly like the GBDT.
 
 Push branch, clone/sync on the box per REMOTE-TRAINING.md, run a short synthetic TCN
 training inside tmux on CUDA; confirm `torch.cuda.is_available()` and that loss decreases.
-Record the actual result here when done.
+
+> **Done (2026-07-05).** Cloned `~/drake` on the box; `uv sync` installed CUDA torch
+> (2.12.1+cu130); fast test suite green on Linux (86 passed). Full pipeline ran in tmux with
+> `run_configurations/synthetic_tcn_smoke.json`: the 705,521-param TCN trained on
+> `NVIDIA GeForce RTX 3060 Ti` (`Training TCN on cuda`), val loss 0.4774 → 0.3903, early
+> stopping restored the best epoch, ~0.1 s/epoch on 392 synthetic matches. Test-split
+> evaluation matrix (synthetic data): draft log loss 0.678 / AUC 0.60, monotonically
+> improving to 0.130 / 1.00 at 30 m. Log: `gpu_smoke.log` on the box.
 
 ## P14. Per-tier evaluation + calibration
 

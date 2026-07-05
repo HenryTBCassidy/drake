@@ -38,6 +38,17 @@ def test_stable_anchor_rejects_each_violated_criterion(mutation: JsonDict) -> No
     assert not is_stable_anchor(entry, min_games=150, min_win_rate=0.47, max_win_rate=0.53)
 
 
+def test_require_veteran_false_accepts_non_veteran_but_still_stable() -> None:
+    non_veteran = stable_entry() | {"veteran": False}
+    assert not is_stable_anchor(non_veteran, min_games=150, min_win_rate=0.47, max_win_rate=0.53)
+    assert is_stable_anchor(non_veteran, min_games=150, min_win_rate=0.47, max_win_rate=0.53, require_veteran=False)
+    # Other criteria still bite even when veteran is not required.
+    still_climbing = stable_entry() | {"veteran": False, "wins": 130, "losses": 70}
+    assert not is_stable_anchor(
+        still_climbing, min_games=150, min_win_rate=0.47, max_win_rate=0.53, require_veteran=False
+    )
+
+
 def test_collect_seed_players_writes_filtered_anchor_parquet(
     synthetic_api: SyntheticRiotApi, collection_config: CollectionConfig, paths_config: PathsConfig
 ) -> None:

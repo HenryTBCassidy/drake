@@ -16,22 +16,30 @@ if TYPE_CHECKING:
     from drake.protocols import IRiotApi
 
 
-def is_stable_anchor(entry: JsonDict, min_games: int, min_win_rate: float, max_win_rate: float) -> bool:
+def is_stable_anchor(
+    entry: JsonDict, min_games: int, min_win_rate: float, max_win_rate: float, require_veteran: bool = True
+) -> bool:
     """Decide whether a ranked player is a reliable tier anchor.
 
     A stable anchor's current rank reliably labels their recent matches: a
-    long-time resident of the division (veteran, not fresh blood), still
-    active, with enough games and a near-50% win rate to be at equilibrium.
+    long-time resident of the division (not fresh blood), still active, with
+    enough games and a near-50% win rate to be at equilibrium.
+
+    Riot's ``veteran`` flag is the strongest "settled in this division" signal
+    but is rare in practice — scanning whole tiers can surface only a handful.
+    ``require_veteran=False`` drops it and leans on games + win-rate + not-fresh
+    + active, which trades a little label confidence for a far larger anchor pool.
     """
     wins = int(entry.get("wins", 0))
     losses = int(entry.get("losses", 0))
     total_games = wins + losses
     if total_games < min_games:
         return False
+    if require_veteran and not bool(entry.get("veteran", False)):
+        return False
     win_rate = wins / total_games
     return (
-        bool(entry.get("veteran", False))
-        and not bool(entry.get("freshBlood", True))
+        not bool(entry.get("freshBlood", True))
         and not bool(entry.get("inactive", False))
         and min_win_rate <= win_rate <= max_win_rate
     )
@@ -52,7 +60,13 @@ def collect_seed_players(
             if not entries:
                 break
             for entry in entries:
-                if not is_stable_anchor(entry, config.min_ranked_games, config.min_win_rate, config.max_win_rate):
+                if not is_stable_anchor(
+                    entry,
+                    config.min_ranked_games,
+                    config.min_win_rate,
+                    config.max_win_rate,
+                    config.require_veteran,
+                ):
                     continue
                 anchors.append(_anchor_record(entry, region, tier))
                 if len(anchors) >= config.max_anchors_per_tier:
